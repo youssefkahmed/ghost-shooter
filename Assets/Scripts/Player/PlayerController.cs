@@ -1,7 +1,9 @@
 using System.Linq;
+using Ghost.Weapons;
 using NUnit.Framework;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Ghost.Player
@@ -23,6 +25,8 @@ namespace Ghost.Player
         [SerializeField] private float gravity = 9.81f;
         [SerializeField] private float jumpHeight;
 
+        [SerializeField] private float rotationSpeed = 50f;
+
         [Header("Footsteps Settings")]
         [SerializeField] private LayerMask terrainLayerMask;
         [SerializeField] private float stepInterval = 1f;
@@ -38,6 +42,7 @@ namespace Ghost.Player
         
         private PlayerControls _playerControls;
         private CharacterController _characterController;
+        private CinemachineBasicMultiChannelPerlin _cinemachineNoise;
         
         private Vector3 _moveInput;
         private float _currentSpeed;
@@ -51,7 +56,8 @@ namespace Ghost.Player
 
         private float _nextStepTimer;
 
-        private CinemachineBasicMultiChannelPerlin _cinemachineNoise;
+        private Vector3 _targetAimRecoil = Vector3.zero;
+        private Vector3 _currentAimRecoil = Vector3.zero;
         
         private void Awake()
         {
@@ -91,6 +97,30 @@ namespace Ghost.Player
             ApplyCameraBob();
         }
 
+        #region Public Methods
+
+        public Transform GetCamera()
+        {
+            return cinemachineCamera.transform;
+        }
+
+        public void ApplyAimRecoil(GunDefinition definition)
+        {
+            var recoilX = Random.Range(-definition.MaxAimRecoil.x, definition.MaxAimRecoil.x) * definition.AimRecoilAmount;
+            var recoilY = Random.Range(-definition.MaxAimRecoil.y, definition.MaxAimRecoil.y) * definition.AimRecoilAmount;
+
+            _targetAimRecoil += new Vector3(recoilX, recoilY, 0);
+            _currentAimRecoil = Vector3.MoveTowards(_currentAimRecoil, _targetAimRecoil, definition.AimRecoilSpeed * Time.deltaTime);
+        }
+
+        public void ResetAimRecoil(GunDefinition definition)
+        {
+            _currentAimRecoil = Vector3.MoveTowards(_currentAimRecoil, Vector3.zero, definition.ResetAimRecoilSpeed * Time.deltaTime);
+            _targetAimRecoil = Vector3.MoveTowards(_targetAimRecoil, Vector3.zero, definition.ResetAimRecoilSpeed * Time.deltaTime);
+        }
+        
+        #endregion
+        
         private void InitializeInputListeners()
         {
             _playerControls.Movement.Move.performed += ctx => SetMoveInput(ctx.ReadValue<Vector2>());
@@ -145,7 +175,7 @@ namespace Ghost.Player
             
             _xRotation = Mathf.Clamp(_xRotation - lookY, -90, 90);
             
-            headFollowTarget.localRotation = Quaternion.Euler(_xRotation, 0, 0);
+            headFollowTarget.localRotation = Quaternion.Slerp(headFollowTarget.transform.rotation, Quaternion.Euler(_xRotation + _currentAimRecoil.y, _currentAimRecoil.x, 0), rotationSpeed * Time.deltaTime);
             transform.Rotate(Vector3.up * lookX);
         }
         

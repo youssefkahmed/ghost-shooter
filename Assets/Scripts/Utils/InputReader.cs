@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -16,35 +15,41 @@ namespace Ghost.Utils
         public event UnityAction<bool> Dash = delegate { };
         public event UnityAction Attack = delegate { };
         public event UnityAction<RaycastHit> Click = delegate { };
-        
-        public PlayerInputActions InputActions;
 
-        public bool IsJumpKeyPressed()
+        private PlayerInputActions _inputActions;
+        private Camera _mainCamera;
+        
+        private void Awake()
         {
-            return InputActions.Player.Jump.IsPressed();
+            _mainCamera = Camera.main;
         }
-    
-        public Vector2 Direction => InputActions.Player.Move.ReadValue<Vector2>();
-        public Vector2 LookDirection => InputActions.Player.Look.ReadValue<Vector2>();
 
         public void EnablePlayerActions()
         {
-            if (InputActions == null)
+            if (_inputActions == null)
             {
-                InputActions = new PlayerInputActions();
-                InputActions.Player.SetCallbacks(this);
+                _inputActions = new PlayerInputActions();
+                _inputActions.Player.SetCallbacks(this);
             }
-            InputActions.Enable();
+            _inputActions.Enable();
         }
+        
+        public bool IsJumpKeyPressed()
+        {
+            return _inputActions.Player.Jump.IsPressed();
+        }
+    
+        public Vector2 Direction => _inputActions.Player.Move.ReadValue<Vector2>();
+        public Vector2 LookDirection => _inputActions.Player.Look.ReadValue<Vector2>();
         
         public void OnMove(InputAction.CallbackContext context)
         {
-            Move.Invoke(context.ReadValue<Vector2>());
+            Move?.Invoke(context.ReadValue<Vector2>());
         }
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            Look.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+            Look?.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
         }
 
         public void OnFire(InputAction.CallbackContext context)
@@ -53,10 +58,10 @@ namespace Ghost.Utils
             {
                 if (IsDeviceMouse(context))
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+                    Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
                     if (Physics.Raycast(ray.origin, ray.direction, out RaycastHit hit, 100))
                     {
-                        Click.Invoke(hit);
+                        Click?.Invoke(hit);
                     }
                 }
             }
@@ -67,19 +72,11 @@ namespace Ghost.Utils
             switch (context.phase)
             {
                 case InputActionPhase.Started:
-                    EnableMouseControlCamera.Invoke();
+                    EnableMouseControlCamera?.Invoke();
                     break;
                 case InputActionPhase.Canceled:
-                    DisableMouseControlCamera.Invoke();
+                    DisableMouseControlCamera?.Invoke();
                     break;
-                case InputActionPhase.Disabled:
-                    break;
-                case InputActionPhase.Waiting:
-                    break;
-                case InputActionPhase.Performed:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -88,19 +85,11 @@ namespace Ghost.Utils
             switch (context.phase)
             {
                 case InputActionPhase.Started:
-                    Dash.Invoke(true);
+                    Dash?.Invoke(true);
                     break;
                 case InputActionPhase.Canceled:
-                    Dash.Invoke(false);
+                    Dash?.Invoke(false);
                     break;
-                case InputActionPhase.Disabled:
-                    break;
-                case InputActionPhase.Waiting:
-                    break;
-                case InputActionPhase.Performed:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -109,19 +98,11 @@ namespace Ghost.Utils
             switch (context.phase)
             {
                 case InputActionPhase.Started:
-                    Jump.Invoke(true);
+                    Jump?.Invoke(true);
                     break;
                 case InputActionPhase.Canceled:
-                    Jump.Invoke(false);
+                    Jump?.Invoke(false);
                     break;
-                case InputActionPhase.Disabled:
-                    break;
-                case InputActionPhase.Waiting:
-                    break;
-                case InputActionPhase.Performed:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
         

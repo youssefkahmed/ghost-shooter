@@ -6,11 +6,11 @@ namespace Ghost.StateMachine
 {
     public class StateMachine
     {
+        public IState CurrentState => _currentNode.State;
+        
         private StateNode _currentNode;
         private readonly Dictionary<Type, StateNode> _nodes = new();
         private readonly HashSet<Transition> _anyTransitions = new();
-        
-        public IState CurrentState => _currentNode.State;
 
         public void Update()
         {

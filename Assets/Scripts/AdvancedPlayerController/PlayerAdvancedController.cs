@@ -148,7 +148,7 @@ namespace Ghost.AdvancedPlayerController
 
         public void OnGroundContactRegained()
         {
-            Vector3 collisionVelocity = useLocalMomentum ? _transform.localToWorldMatrix * _momentum : _momentum;
+            Vector3 collisionVelocity = GetMomentum();
             OnLand?.Invoke(collisionVelocity);
         }
         

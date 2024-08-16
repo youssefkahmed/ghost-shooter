@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Ghost.Utils
+namespace Ghost.StateMachine
 {
     public interface IPredicate
     {
@@ -11,19 +11,22 @@ namespace Ghost.Utils
 
     public class And : IPredicate
     {
-        [SerializeField] List<IPredicate> rules = new List<IPredicate>();
+        [SerializeField] private List<IPredicate> rules = new();
+        
         public bool Evaluate() => rules.All(r => r.Evaluate());
     }
 
     public class Or : IPredicate
     {
-        [SerializeField] List<IPredicate> rules = new List<IPredicate>();
+        [SerializeField] private List<IPredicate> rules = new();
+        
         public bool Evaluate() => rules.Any(r => r.Evaluate());
     }
 
     public class Not : IPredicate
     {
-        [SerializeField] IPredicate rule;
+        [SerializeField] private IPredicate rule;
+        
         public bool Evaluate() => !rule.Evaluate();
     }
 }

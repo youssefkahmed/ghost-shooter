@@ -1,5 +1,3 @@
-using Ghost.Utils;
-
 namespace Ghost.StateMachine
 {
     public interface ITransition

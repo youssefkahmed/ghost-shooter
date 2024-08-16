@@ -31,6 +31,7 @@ namespace Ghost.AdvancedPlayerController
         {
             return _ceilingWasHit;
         }
+        
         public void Reset()
         {
             _ceilingWasHit = false;

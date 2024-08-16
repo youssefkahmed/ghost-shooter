@@ -1,5 +1,4 @@
 using System;
-using Ghost.Utils;
 
 namespace Ghost.StateMachine
 {
@@ -13,7 +12,8 @@ namespace Ghost.StateMachine
     {
         public readonly T Condition;
 
-        public Transition(IState to, T condition) {
+        public Transition(IState to, T condition)
+        {
             To = to;
             Condition = condition;
         }
@@ -58,7 +58,10 @@ namespace Ghost.StateMachine
             _func = func;
         }
 
-        public bool Evaluate() => _func.Invoke();
+        public bool Evaluate()
+        {
+            return _func.Invoke();
+        }
     }
 
     /// <summary>
@@ -68,7 +71,10 @@ namespace Ghost.StateMachine
     {
         public bool Flag;
 
-        public ActionPredicate(ref Action eventReaction) => eventReaction += () => { Flag = true; };
+        public ActionPredicate(ref Action eventReaction)
+        {
+            eventReaction += () => { Flag = true; };
+        }
 
         public bool Evaluate()
         {

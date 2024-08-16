@@ -15,7 +15,6 @@ namespace Ghost.StateMachine
         public void Update()
         {
             Transition transition = GetTransition();
-            
             if (transition != null)
             {
                 ChangeState(transition.To);

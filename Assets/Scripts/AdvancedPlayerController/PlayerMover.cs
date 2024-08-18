@@ -60,10 +60,10 @@ namespace Ghost.AdvancedPlayerController
                 return;
             }
             
-            var distance = _sensor.GetDistance();
-            var upperLimit = colliderHeight * _transform.localScale.x * (1f - stepHeightRatio) * 0.5f;
-            var middle = upperLimit + colliderHeight * _transform.localScale.x * stepHeightRatio;
-            var distanceToGo = middle - distance;
+            float distance = _sensor.GetDistance();
+            float upperLimit = colliderHeight * _transform.localScale.x * (1f - stepHeightRatio) * 0.5f;
+            float middle = upperLimit + colliderHeight * _transform.localScale.x * stepHeightRatio;
+            float distanceToGo = middle - distance;
             
             // Velocity needed to move player to correct position over the course of a single frame
             _currentGroundAdjustmentVelocity = _transform.up * (distanceToGo / Time.fixedDeltaTime);
@@ -136,15 +136,15 @@ namespace Ghost.AdvancedPlayerController
             // Small factor added to prevent clipping issues when the _sensor range is calculated
             const float safetyDistanceFactor = 0.001f;
             
-            var length = colliderHeight * (1f - stepHeightRatio) * 0.5f + colliderHeight * stepHeightRatio;
+            float length = colliderHeight * (1f - stepHeightRatio) * 0.5f + colliderHeight * stepHeightRatio;
             _baseSensorRange = length * (1f + safetyDistanceFactor) * _transform.localScale.x;
             _sensor.CastLength = length * _transform.localScale.x;
         }
 
         private void RecalculateSensorLayerMask()
         {
-            var objectLayer = gameObject.layer;
-            var layerMask = Physics.AllLayers; // Constant, equals -1
+            int objectLayer = gameObject.layer;
+            int layerMask = Physics.AllLayers; // Constant, equals -1
 
             // 32 for 32 bits of the LayerMask
             for (var i = 0; i < 32; i++)
@@ -156,7 +156,7 @@ namespace Ghost.AdvancedPlayerController
                 }
             }
             
-            var ignoreRaycastLayer = LayerMask.NameToLayer("Ignore Raycast");
+            int ignoreRaycastLayer = LayerMask.NameToLayer("Ignore Raycast");
             layerMask &= ~(1 << ignoreRaycastLayer);
             
             _sensor.LayerMask = layerMask;

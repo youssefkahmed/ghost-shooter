@@ -50,6 +50,9 @@ namespace Ghost.AdvancedPlayerController
             
             _jumpTimer = new CountdownTimer(jumpDuration);
             SetupStateMachine();
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         private void Start()
@@ -79,6 +82,11 @@ namespace Ghost.AdvancedPlayerController
             _savedMovementVelocity = CalculateMovementVelocity();
             
             ResetJumpKeys();
+
+            if (_ceilingDetector)
+            {
+                _ceilingDetector.Reset();
+            }
         }
 
         #region Public Methods
@@ -151,6 +159,13 @@ namespace Ghost.AdvancedPlayerController
             Vector3 collisionVelocity = GetMomentum();
             OnLand?.Invoke(collisionVelocity);
         }
+
+        public void OnFallStart()
+        {
+            Vector3 currentUpwardMomentum = VectorMath.ExtractDotVector(_momentum, _transform.up);
+            _momentum = VectorMath.RemoveDotVector(_momentum, _transform.up);
+            _momentum -= _transform.up * currentUpwardMomentum.magnitude;
+        }
         
         #endregion
 
@@ -182,6 +197,7 @@ namespace Ghost.AdvancedPlayerController
             At(rising, grounded, () => _mover.IsGrounded() && !IsGroundTooSteep());
             At(rising, sliding, () => _mover.IsGrounded() && IsGroundTooSteep());
             At(rising, falling, IsFalling);
+            At(rising, falling, () => _ceilingDetector != null && _ceilingDetector.HitCeiling());
             
             At(jumping, rising, () => _jumpTimer.IsFinished || _jumpKeyWasLetGo);
             At(jumping, falling, () => _ceilingDetector != null && _ceilingDetector.HitCeiling());

@@ -8,7 +8,7 @@ namespace Ghost.AdvancedPlayerController
         public LayerMask LayerMask = 255;
         
         private Vector3 _origin = Vector3.zero;
-        private Transform _transform;
+        private readonly Transform _transform;
 
         private CastDirection _castDirection;
 
@@ -30,7 +30,7 @@ namespace Ghost.AdvancedPlayerController
 
         public bool HasDetectedHit()
         {
-            return _hitInfo.collider != null;
+            return _hitInfo.collider;
         }
         
         public float GetDistance()

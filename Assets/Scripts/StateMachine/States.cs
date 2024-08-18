@@ -25,6 +25,11 @@ namespace Ghost.StateMachine
         {
             _controller = controller;
         }
+
+        public void OnEnter()
+        {
+            _controller.OnFallStart();
+        }
     }
 
     public class SlidingState : IState

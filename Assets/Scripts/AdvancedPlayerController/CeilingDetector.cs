@@ -4,11 +4,11 @@ namespace Ghost.AdvancedPlayerController
 {
     public class CeilingDetector : MonoBehaviour
     {
-        public float ceilingAngleLimit = 10f;
-        public bool isInDebugMode;
+        [SerializeField] private float ceilingAngleLimit = 10f;
+        [SerializeField] private bool isInDebugMode;
 
         private bool _ceilingWasHit;
-        private const float DebugDrawDuration = 2.0f;
+        private const float DEBUG_DRAW_DURATION = 2.0f;
 
         private Transform _transform;
 
@@ -44,7 +44,7 @@ namespace Ghost.AdvancedPlayerController
                 return;
             }
 
-            var angle = Vector3.Angle(-_transform.up, collision.contacts[0].normal);
+            float angle = Vector3.Angle(-_transform.up, collision.contacts[0].normal);
             if (angle < ceilingAngleLimit)
             {
                 _ceilingWasHit = true;
@@ -52,7 +52,7 @@ namespace Ghost.AdvancedPlayerController
 
             if (isInDebugMode)
             {
-                Debug.DrawRay(collision.contacts[0].point, collision.contacts[0].normal, Color.red, DebugDrawDuration);
+                Debug.DrawRay(collision.contacts[0].point, collision.contacts[0].normal, Color.red, DEBUG_DRAW_DURATION);
             }
         }
     }

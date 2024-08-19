@@ -795,6 +795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   definition: {fileID: 11400000, guid: 923254bc51a42d144ad12ae4995c752c, type: 2}
   muzzle: {fileID: 1141462122}
+  muzzleFlash: {fileID: 0}
   bulletHolePrefab: {fileID: 3015252629727256697, guid: 17672c1e2f779bb44a012657f6c5a34e, type: 3}
   bulletHitParticlePrefab: {fileID: 901287868697625410, guid: f45c9ed900c79a44bac534a7b5977343, type: 3}
 --- !u!1 &672861322

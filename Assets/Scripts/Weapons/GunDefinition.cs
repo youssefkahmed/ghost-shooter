@@ -28,5 +28,9 @@ namespace Ghost.Weapons
         [field: SerializeField] public Vector2 MaxDirectionalRecoil { get; private set; }
         [field: SerializeField] public float DirectionalRecoilSpeed { get; private set; }
         [field: SerializeField] public float ResetDirectionalRecoilSpeed { get; private set; }
+        
+        [Header("VFX")]
+        [field: SerializeField] public GameObject BulletTrailPrefab { get; private set; }
+        [field: SerializeField] public float BulletSpeed { get; private set; }
     }
 }

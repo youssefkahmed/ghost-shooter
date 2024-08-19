@@ -6,10 +6,15 @@ namespace Ghost.Weapons
 {
     public abstract class Gun : MonoBehaviour
     {
-        
         [SerializeField] protected GunDefinition definition;
+        [SerializeField] protected Transform muzzle;
+        [SerializeField] protected GameObject muzzleFlash;
+        [SerializeField] protected GameObject bulletHolePrefab;
+        [SerializeField] protected GameObject bulletHitParticlePrefab;
 
         protected Transform CameraTransform;
+        protected bool IsShooting;
+        
         private PlayerController _playerController;
         
         private float _currentAmmo;
@@ -32,6 +37,8 @@ namespace Ghost.Weapons
         {
             _playerController.ResetAimRecoil(definition);
             ResetDirectionalRecoil();
+
+            ToggleMuzzleFlash(IsShooting);
         }
 
         #region Reloading
@@ -85,6 +92,8 @@ namespace Ghost.Weapons
 
         private void HandleShoot()
         {
+            IsShooting = true;
+            
             _currentAmmo--;
             Shoot();
             
@@ -94,6 +103,11 @@ namespace Ghost.Weapons
         }
 
         protected abstract void Shoot();
+
+        private void ToggleMuzzleFlash(bool activate)
+        {
+            muzzleFlash?.SetActive(activate);
+        }
 
         #endregion
 

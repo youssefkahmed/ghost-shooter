@@ -15,7 +15,7 @@ MonoBehaviour:
   <GunName>k__BackingField: Pistol
   <TargetLayerMask>k__BackingField:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 115
   <ShootingRange>k__BackingField: 100
   <FireRate>k__BackingField: 4
   <MagazineSize>k__BackingField: 10
@@ -28,3 +28,5 @@ MonoBehaviour:
   <MaxDirectionalRecoil>k__BackingField: {x: 1, y: 2}
   <DirectionalRecoilSpeed>k__BackingField: 10
   <ResetDirectionalRecoilSpeed>k__BackingField: 1
+  <BulletTrailPrefab>k__BackingField: {fileID: 8215546635912416401, guid: 3e950b0dc55e5d746a110f3f911983b9, type: 3}
+  <BulletSpeed>k__BackingField: 100

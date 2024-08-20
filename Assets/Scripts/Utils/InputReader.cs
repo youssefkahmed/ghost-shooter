@@ -19,11 +19,6 @@ namespace Ghost.Utils
         private PlayerInputActions _inputActions;
         private Camera _mainCamera;
         
-        private void Awake()
-        {
-            _mainCamera = Camera.main;
-        }
-
         public void EnablePlayerActions()
         {
             if (_inputActions == null)
@@ -32,6 +27,8 @@ namespace Ghost.Utils
                 _inputActions.Player.SetCallbacks(this);
             }
             _inputActions.Enable();
+            
+            _mainCamera = Camera.main;
         }
         
         public bool IsJumpKeyPressed()

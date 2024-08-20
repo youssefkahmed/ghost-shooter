@@ -7,7 +7,8 @@ namespace Ghost.AdvancedFirstPersonController
     {
         [SerializeField] private Transform orientation;
 
-        [Header("Movement")] [SerializeField] private float walkSpeed;
+        [Header("Movement")]
+        [SerializeField] private float walkSpeed;
         [SerializeField] private float sprintSpeed;
         [SerializeField] private float groundDrag;
 
@@ -58,7 +59,7 @@ namespace Ghost.AdvancedFirstPersonController
         private void Update()
         {
             // Ground check
-            _isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundLayerMask);
+            _isGrounded = Physics.Raycast(transform.position + Vector3.up * playerHeight / 2, Vector3.down, playerHeight * 0.5f + 0.2f, groundLayerMask);
 
             HandleInput();
             SpeedControl();

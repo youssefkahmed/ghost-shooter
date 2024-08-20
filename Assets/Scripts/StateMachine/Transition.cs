@@ -21,7 +21,7 @@ namespace Ghost.StateMachine
         public override bool Evaluate()
         {
             // Check if the condition variable is a Func<bool> and call the Invoke method if it is not null
-            var result = (Condition as Func<bool>)?.Invoke();
+            bool? result = (Condition as Func<bool>)?.Invoke();
             if (result.HasValue)
             {
                 return result.Value;
@@ -78,7 +78,7 @@ namespace Ghost.StateMachine
 
         public bool Evaluate()
         {
-            var result = Flag;
+            bool result = Flag;
             Flag = false;
             return result;
         }
